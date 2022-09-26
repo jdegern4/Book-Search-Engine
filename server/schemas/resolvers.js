@@ -6,7 +6,7 @@ const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-                const userData = await User.findOne({ __id: context.user.__id })
+                const userData = await User.findOne({ _id: context.user._id })
                 .select('-__v -password');
                 return userData;
             }
@@ -38,7 +38,7 @@ const resolvers = {
         saveBook: async (parent, { bookData }, context) => {
             if (context.user) {
                 const savedBook = await User.findByIdAndUpdate(
-                    { __id: context.user.__id },
+                    { _id: context.user._id },
                     { $push: { savedBooks: bookData } },
                     { new: true, runValidators: true },
                 );
@@ -50,7 +50,7 @@ const resolvers = {
         removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 const removeBook = await User.findByIdAndUpdate(
-                    { __id: context.user.__id },
+                    { _id: context.user._id },
                     { $pull: { savedBooks: { bookId } } }
                 );
                 return removeBook;
